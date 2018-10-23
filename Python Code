@@ -1,0 +1,87 @@
+# Caesar Cipher Engine
+# Author: Opie
+# Date Created : 10/23/2018
+
+
+import collections
+import string
+
+
+def get_mode():
+    try:
+        while True:
+            print('Press: "E" for Encrypt | "D" for Decrypt | "B" for Brute Force')
+            mode = input().upper()
+            if mode == 'E':
+                print('You have chosen to Encrypt...\n')
+                return mode
+            elif mode == 'D':
+                print('You have chosen to Decrypt...\n')
+                return mode
+            elif mode == 'B':
+                print('You have chosen to Brute Force...\n')
+                return mode
+            print('Invalid option selected')
+    except ValueError:
+        print('Invalid Input')
+        get_mode()
+
+
+def get_step():
+    try:
+        while True:
+            print('Please enter the amount you would like to step the encryption:')
+            step = int(input())
+            if (step >= 1) and (step <= 26):
+                return step
+            print('The Step has to be between 1-26.')
+    except ValueError:
+        print('Step has to be a number.')
+        get_step()
+
+
+def get_mess():
+    print('Please enter your text here: ')
+    mess = input()
+    return mess
+
+
+def cipher(rotate, number):
+    upper = collections.deque(string.ascii_uppercase)
+    lower = collections.deque(string.ascii_lowercase)
+
+    upper.rotate(number)
+    lower.rotate(number)
+
+    upper = "".join(list(upper))
+    lower = "".join(list(lower))
+
+    transupper = str.maketrans(string.ascii_uppercase, upper)
+    translower = str.maketrans(string.ascii_lowercase, lower)
+
+    return rotate.translate(transupper).translate(translower)
+
+
+def main():
+    mode = get_mode()
+
+    if mode == 'E':
+        step = get_step()
+        mess = get_mess()
+        print('Your Encrypted Message is:\n', cipher(mess, step))
+    elif mode == 'D':
+        step = get_step()
+        mess = get_mess()
+        print('Your Decoded Message is:\n', cipher(mess, step))
+    elif mode == 'B':
+        mess = get_mess()
+        steps = 0
+        print('These are all the possible outcomes of the cipher:\n')
+        while steps < 26:
+            steps += 1
+            decrypted = cipher(mess, int(steps))
+            print(steps, decrypted)
+
+
+if __name__ == '__main__':
+    main()
